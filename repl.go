@@ -7,10 +7,11 @@ import (
 	"strings"
 	"time"
 
-	pokecache "github.com/breyting/pokedex-discord/internal"
+	commands "github.com/breyting/pokedex-discord/pokedexcli/commands"
+	pokecache "github.com/breyting/pokedex-discord/pokedexcli/internal/pokecache"
 )
 
-var listOfCommands map[string]cliCommand
+var listOfCommands map[string]commands.CliCommand
 var conf config
 var cache = pokecache.NewCache((5 * time.Second))
 
@@ -24,42 +25,42 @@ func start_repl() {
 		"exit": {
 			name:        "exit",
 			description: "Exit the Pokedex",
-			callback:    commandExit,
+			callback:    commands.CommandExit,
 		},
 		"help": {
 			name:        "help",
 			description: "Displays a help message",
-			callback:    commandHelp,
+			callback:    commands.CommandHelp,
 		},
 		"map": {
 			name:        "map",
 			description: "Displays the 20 next area location",
-			callback:    commandMap,
+			callback:    commands.CommandMap,
 		},
 		"mapb": {
 			name:        "mapb",
 			description: "Displays the 20 previous area location",
-			callback:    commandMapb,
+			callback:    commands.CommandMapb,
 		},
 		"explore": {
 			name:        "explore",
 			description: "Displays the pokemon that you can encounter in the location",
-			callback:    commandExplore,
+			callback:    commands.CommandExplore,
 		},
 		"catch": {
 			name:        "catch",
 			description: "Try to catch a pokemon",
-			callback:    commandCatch,
+			callback:    commands.CommandCatch,
 		},
 		"inspect": {
 			name:        "inspect",
 			description: "Inspect details of a catched pokemon",
-			callback:    commandinspect,
+			callback:    commands.CommandInspect,
 		},
 		"pokedex": {
 			name:        "pokedex",
 			description: "Diplays all catched pokemons",
-			callback:    commandPokedex,
+			callback:    commands.CommandPokedex,
 		},
 	}
 
@@ -90,15 +91,4 @@ func cleanInput(text string) []string {
 	output := strings.ToLower(text)
 	words := strings.Fields(output)
 	return words
-}
-
-type cliCommand struct {
-	name        string
-	description string
-	callback    func(*config, []string) error
-}
-
-type config struct {
-	next     string
-	previous string
 }

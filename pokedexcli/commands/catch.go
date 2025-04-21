@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 
 var ownPokedex = map[string]Pokemon{}
 
-func commandCatch(config *config, input []string) error {
+func CommandCatch(config *config, input []string) error {
 	if len(input) == 0 {
 		return errors.New("Can not catch without a pokemon name")
 	}

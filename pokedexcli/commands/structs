@@ -1,0 +1,12 @@
+package commands
+
+type CliCommand struct {
+	name        string
+	description string
+	callback    func(*config, []string) error
+}
+
+type Config struct {
+	next     string
+	previous string
+}

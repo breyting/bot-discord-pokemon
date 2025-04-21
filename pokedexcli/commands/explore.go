@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func commandExplore(config *config, input []string) error {
+func CommandExplore(config *config, input []string) error {
 	if len(input) == 0 {
 		return errors.New("Can not explore without a location")
 	}

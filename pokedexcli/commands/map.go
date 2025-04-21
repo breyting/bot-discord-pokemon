@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	"encoding/json"
@@ -10,18 +10,7 @@ import (
 	"strconv"
 )
 
-func commandMapb(config *config, input []string) error {
-	id := path.Base(config.next)
-	nextId, _ := strconv.Atoi(id)
-
-	if nextId < 40 {
-		return errors.New("Can not show previous locations if not at least 40 locations are shown")
-	}
-
-	nextId -= 40
-	config.next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
-	config.previous = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId-1)
-
+func CommandMap(config *config, input []string) error {
 	for i := 0; i < 20; i++ {
 		id := path.Base(config.next)
 		val, ok := cache.Get(id)

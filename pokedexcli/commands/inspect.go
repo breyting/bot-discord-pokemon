@@ -1,10 +1,10 @@
-package main
+package commands
 
 import (
 	"fmt"
 )
 
-func commandinspect(config *config, input []string) error {
+func CommandInspect(config *config, input []string) error {
 	pokemon := input[0]
 	val, ok := ownPokedex[pokemon]
 	if ok {

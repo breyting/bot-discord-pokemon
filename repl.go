@@ -8,59 +8,56 @@ import (
 	"time"
 
 	commands "github.com/breyting/pokedex-discord/pokedexcli/commands"
-	pokecache "github.com/breyting/pokedex-discord/pokedexcli/internal/pokecache"
+	pokecache "github.com/breyting/pokedex-discord/pokedexcli/pokecache"
 )
 
 var listOfCommands map[string]commands.CliCommand
-var conf config
+var conf commands.Config
 var cache = pokecache.NewCache((5 * time.Second))
 
-func start_repl() {
-	conf = config{
-		next:     "https://pokeapi.co/api/v2/location-area/1",
-		previous: "",
-	}
+func startRepl(conf *commands.Config) {
+	conf.Next = "https://pokeapi.co/api/v2/location-area/1"
 
-	listOfCommands = map[string]cliCommand{
+	listOfCommands = map[string]commands.CliCommand{
 		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commands.CommandExit,
+			Name:        "exit",
+			Description: "Exit the Pokedex",
+			Callback:    commands.CommandExit,
 		},
 		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commands.CommandHelp,
+			Name:        "help",
+			Description: "Displays a help message",
+			Callback:    commands.CommandHelp,
 		},
 		"map": {
-			name:        "map",
-			description: "Displays the 20 next area location",
-			callback:    commands.CommandMap,
+			Name:        "map",
+			Description: "Displays the 20 next area location",
+			Callback:    commands.CommandMap,
 		},
 		"mapb": {
-			name:        "mapb",
-			description: "Displays the 20 previous area location",
-			callback:    commands.CommandMapb,
+			Name:        "mapb",
+			Description: "Displays the 20 previous area location",
+			Callback:    commands.CommandMapb,
 		},
 		"explore": {
-			name:        "explore",
-			description: "Displays the pokemon that you can encounter in the location",
-			callback:    commands.CommandExplore,
+			Name:        "explore",
+			Description: "Displays the pokemon that you can encounter in the location",
+			Callback:    commands.CommandExplore,
 		},
 		"catch": {
-			name:        "catch",
-			description: "Try to catch a pokemon",
-			callback:    commands.CommandCatch,
+			Name:        "catch",
+			Description: "Try to catch a pokemon",
+			Callback:    commands.CommandCatch,
 		},
 		"inspect": {
-			name:        "inspect",
-			description: "Inspect details of a catched pokemon",
-			callback:    commands.CommandInspect,
+			Name:        "inspect",
+			Description: "Inspect details of a catched pokemon",
+			Callback:    commands.CommandInspect,
 		},
 		"pokedex": {
-			name:        "pokedex",
-			description: "Diplays all catched pokemons",
-			callback:    commands.CommandPokedex,
+			Name:        "pokedex",
+			Description: "Diplays all catched pokemons",
+			Callback:    commands.CommandPokedex,
 		},
 	}
 
@@ -77,7 +74,7 @@ func start_repl() {
 
 		command, exists := listOfCommands[input[0]]
 		if exists {
-			err := command.callback(&conf, input[1:])
+			err := command.Callback(conf, input[1:])
 			if err != nil {
 				fmt.Println(err)
 			}

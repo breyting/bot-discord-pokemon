@@ -10,14 +10,14 @@ import (
 	"strconv"
 )
 
-func CommandMap(config *config, input []string) error {
+func CommandMap(config *Config, input []string) error {
 	for i := 0; i < 20; i++ {
-		id := path.Base(config.next)
+		id := path.Base(config.Next)
 		val, ok := cache.Get(id)
 		if ok {
 			fmt.Println(string(val))
 		} else {
-			res, err := http.Get(config.next)
+			res, err := http.Get(config.Next)
 			if err != nil {
 				return err
 			}
@@ -38,11 +38,11 @@ func CommandMap(config *config, input []string) error {
 			cache.Add(id, []byte(location["name"]))
 		}
 
-		config.previous = config.next
-		id = path.Base(config.previous)
-		nextId, _ := strconv.Atoi(id)
-		nextId += 1
-		config.next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
+		config.Previous = config.Next
+		id = path.Base(config.Previous)
+		NextId, _ := strconv.Atoi(id)
+		NextId += 1
+		config.Next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", NextId)
 	}
 	return nil
 }

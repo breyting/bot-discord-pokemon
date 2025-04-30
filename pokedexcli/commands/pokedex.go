@@ -2,7 +2,7 @@ package commands
 
 import "fmt"
 
-func CommandPokedex(config *config, input []string) error {
+func CommandPokedex(config *Config, input []string) error {
 	if len(ownPokedex) == 0 {
 		return fmt.Errorf("you didn't catch any pokemon yet")
 	}

@@ -2,9 +2,11 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandInspect(config *config, input []string) error {
+func CommandInspect(config *Config, input []string) error {
 	pokemon := input[0]
 	val, ok := ownPokedex[pokemon]
 	if ok {
@@ -15,7 +17,7 @@ func CommandInspect(config *config, input []string) error {
 	}
 }
 
-func printInfo(pokemonInfo Pokemon) {
+func printInfo(pokemonInfo pokeapi.Pokemon) {
 	fmt.Printf("Name: %s\n", pokemonInfo.Name)
 	fmt.Printf("Height: %d\n", pokemonInfo.Height)
 	fmt.Printf("Weight: %d\n", pokemonInfo.Weight)

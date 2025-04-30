@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	pokecache "github.com/breyting/pokedex-discord/internal"
+	pokecache "github.com/breyting/pokedex-discord/pokedexcli/pokecache"
 )
 
 func TestCleanInput(t *testing.T) {

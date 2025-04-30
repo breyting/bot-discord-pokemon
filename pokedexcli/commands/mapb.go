@@ -10,8 +10,8 @@ import (
 	"strconv"
 )
 
-func CommandMapb(config *config, input []string) error {
-	id := path.Base(config.next)
+func CommandMapb(config *Config, input []string) error {
+	id := path.Base(config.Next)
 	nextId, _ := strconv.Atoi(id)
 
 	if nextId < 40 {
@@ -19,16 +19,16 @@ func CommandMapb(config *config, input []string) error {
 	}
 
 	nextId -= 40
-	config.next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
-	config.previous = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId-1)
+	config.Next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
+	config.Previous = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId-1)
 
 	for i := 0; i < 20; i++ {
-		id := path.Base(config.next)
+		id := path.Base(config.Next)
 		val, ok := cache.Get(id)
 		if ok {
 			fmt.Println(string(val))
 		} else {
-			res, err := http.Get(config.next)
+			res, err := http.Get(config.Next)
 			if err != nil {
 				return err
 			}
@@ -49,11 +49,11 @@ func CommandMapb(config *config, input []string) error {
 			cache.Add(id, []byte(location["name"]))
 		}
 
-		config.previous = config.next
-		id = path.Base(config.previous)
+		config.Previous = config.Next
+		id = path.Base(config.Previous)
 		nextId, _ := strconv.Atoi(id)
 		nextId += 1
-		config.next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
+		config.Next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%d", nextId)
 	}
 	return nil
 }

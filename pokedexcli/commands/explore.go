@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func CommandExplore(config *config, input []string) error {
+func CommandExplore(config *Config, input []string) error {
 	if len(input) == 0 {
 		return errors.New("Can not explore without a location")
 	}

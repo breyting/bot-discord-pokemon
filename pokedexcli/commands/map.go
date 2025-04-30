@@ -13,6 +13,7 @@ import (
 func CommandMap(config *Config, input []string) error {
 	for i := 0; i < 20; i++ {
 		id := path.Base(config.Next)
+		cache := config.PokeapiClient.Cache
 		val, ok := cache.Get(id)
 		if ok {
 			fmt.Println(string(val))

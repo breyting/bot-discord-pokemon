@@ -7,19 +7,20 @@ import (
 	"math/rand"
 	"net/http"
 
-	pokemon "github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
+	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-var ownPokedex = map[string]pokemon.Pokemon{}
+var ownPokedex = map[string]pokeapi.Pokemon{}
 
 func CommandCatch(config *Config, input []string) error {
 	if len(input) == 0 {
 		return errors.New("Can not catch without a pokemon name")
 	}
 	pokemonInput := input[0]
+	cache := config.PokeapiClient.Cache
 	val, ok := cache.Get(pokemonInput)
 	if ok {
-		var pokemonInfo pokemon.Pokemon
+		var pokemonInfo pokeapi.Pokemon
 		err := json.Unmarshal(val, &pokemonInfo)
 		if err != nil {
 			msg := fmt.Sprintf("Unmarshal error : %s", err)
@@ -37,7 +38,7 @@ func CommandCatch(config *Config, input []string) error {
 			msg := fmt.Sprintf("This pokemon doesn't exist!")
 			return errors.New(msg)
 		}
-		var pokemonInfo pokemon.Pokemon
+		var pokemonInfo pokeapi.Pokemon
 		decoder := json.NewDecoder(res.Body)
 		if err = decoder.Decode(&pokemonInfo); err != nil {
 			msg := fmt.Sprintf("Decoder error : %s", err)
@@ -55,7 +56,7 @@ func CommandCatch(config *Config, input []string) error {
 	return nil
 }
 
-func tryingCatch(pokemonInfo pokemon.Pokemon) {
+func tryingCatch(pokemonInfo pokeapi.Pokemon) {
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemonInfo.Name)
 	baseExperience := pokemonInfo.BaseExperience
 	chance := rand.Intn(baseExperience)

@@ -6,8 +6,8 @@ func CommandHelp(config *Config, input []string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage :")
 	fmt.Println()
-	for _, command := range listOfCommands {
-		fmt.Printf("%s: %s\n", command.name, command.description)
+	for _, command := range ListOfCommands {
+		fmt.Printf("%s: %s\n", command.Name, command.Description)
 	}
 	return nil
 }

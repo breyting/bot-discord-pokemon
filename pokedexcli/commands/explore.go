@@ -14,6 +14,7 @@ func CommandExplore(config *Config, input []string) error {
 	location := input[0]
 	fmt.Printf("Exploring %s...\n", location)
 
+	cache := config.PokeapiClient.Cache
 	val, ok := cache.Get(location)
 	if ok {
 		var locationArea LocationArea

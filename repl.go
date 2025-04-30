@@ -11,55 +11,11 @@ import (
 	pokecache "github.com/breyting/pokedex-discord/pokedexcli/pokecache"
 )
 
-var listOfCommands map[string]commands.CliCommand
-var conf commands.Config
 var cache = pokecache.NewCache((5 * time.Second))
 
 func startRepl(conf *commands.Config) {
+	commands.Init()
 	conf.Next = "https://pokeapi.co/api/v2/location-area/1"
-
-	listOfCommands = map[string]commands.CliCommand{
-		"exit": {
-			Name:        "exit",
-			Description: "Exit the Pokedex",
-			Callback:    commands.CommandExit,
-		},
-		"help": {
-			Name:        "help",
-			Description: "Displays a help message",
-			Callback:    commands.CommandHelp,
-		},
-		"map": {
-			Name:        "map",
-			Description: "Displays the 20 next area location",
-			Callback:    commands.CommandMap,
-		},
-		"mapb": {
-			Name:        "mapb",
-			Description: "Displays the 20 previous area location",
-			Callback:    commands.CommandMapb,
-		},
-		"explore": {
-			Name:        "explore",
-			Description: "Displays the pokemon that you can encounter in the location",
-			Callback:    commands.CommandExplore,
-		},
-		"catch": {
-			Name:        "catch",
-			Description: "Try to catch a pokemon",
-			Callback:    commands.CommandCatch,
-		},
-		"inspect": {
-			Name:        "inspect",
-			Description: "Inspect details of a catched pokemon",
-			Callback:    commands.CommandInspect,
-		},
-		"pokedex": {
-			Name:        "pokedex",
-			Description: "Diplays all catched pokemons",
-			Callback:    commands.CommandPokedex,
-		},
-	}
 
 	scan := bufio.NewScanner(os.Stdin)
 	for {
@@ -72,7 +28,7 @@ func startRepl(conf *commands.Config) {
 			continue
 		}
 
-		command, exists := listOfCommands[input[0]]
+		command, exists := commands.ListOfCommands[input[0]]
 		if exists {
 			err := command.Callback(conf, input[1:])
 			if err != nil {

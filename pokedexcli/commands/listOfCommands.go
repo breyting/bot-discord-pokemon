@@ -31,11 +31,11 @@ func Init() {
 			Description: "Displays the pokemon that you can encounter in the location",
 			Callback:    CommandExplore,
 		},
-		"catch": {
-			Name:        "catch",
-			Description: "Try to catch a pokemon",
-			Callback:    CommandCatch,
-		},
+		// "catch": {
+		// 	Name:        "catch",
+		// 	Description: "Try to catch a pokemon",
+		// 	Callback:    CommandCatch,
+		// },
 		"inspect": {
 			Name:        "inspect",
 			Description: "Inspect details of a catched pokemon",

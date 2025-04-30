@@ -5,13 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	commands "github.com/breyting/pokedex-discord/pokedexcli/commands"
-	pokecache "github.com/breyting/pokedex-discord/pokedexcli/pokecache"
 )
-
-var cache = pokecache.NewCache((5 * time.Second))
 
 func startRepl(conf *commands.Config) {
 	commands.Init()

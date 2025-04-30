@@ -12,9 +12,9 @@ import (
 
 var ownPokedex = map[string]pokeapi.Pokemon{}
 
-func CommandCatch(config *Config, input []string) error {
+func CommandCatch(config *Config, input []string) (string, error) {
 	if len(input) == 0 {
-		return errors.New("Can not catch without a pokemon name")
+		return "", errors.New("Can not catch without a pokemon name")
 	}
 	pokemonInput := input[0]
 	cache := config.PokeapiClient.Cache
@@ -24,47 +24,44 @@ func CommandCatch(config *Config, input []string) error {
 		err := json.Unmarshal(val, &pokemonInfo)
 		if err != nil {
 			msg := fmt.Sprintf("Unmarshal error : %s", err)
-			return errors.New(msg)
+			return "", errors.New(msg)
 		}
-		tryingCatch(pokemonInfo)
+		return tryingCatch(pokemonInfo)
 	} else {
 		api_pokemon := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon/%s", pokemonInput)
 		res, err := http.Get(api_pokemon)
 		if err != nil {
-			return err
+			return "", err
 		}
 		defer res.Body.Close()
 		if res.StatusCode > 299 {
 			msg := fmt.Sprintf("This pokemon doesn't exist!")
-			return errors.New(msg)
+			return "", errors.New(msg)
 		}
 		var pokemonInfo pokeapi.Pokemon
 		decoder := json.NewDecoder(res.Body)
 		if err = decoder.Decode(&pokemonInfo); err != nil {
 			msg := fmt.Sprintf("Decoder error : %s", err)
-			return errors.New(msg)
+			return "", errors.New(msg)
 		}
 
 		data, err := json.Marshal(pokemonInfo)
 		if err != nil {
-			return fmt.Errorf("error with Marshal: %s", err)
+			return "", fmt.Errorf("error with Marshal: %s", err)
 		}
 		cache.Add(pokemonInput, []byte(data))
 
-		tryingCatch(pokemonInfo)
+		return tryingCatch(pokemonInfo)
 	}
-	return nil
 }
 
-func tryingCatch(pokemonInfo pokeapi.Pokemon) {
-	fmt.Printf("Throwing a Pokeball at %s...\n", pokemonInfo.Name)
+func tryingCatch(pokemonInfo pokeapi.Pokemon) (string, error) {
 	baseExperience := pokemonInfo.BaseExperience
 	chance := rand.Intn(baseExperience)
 	if chance < 50 {
-		fmt.Printf("%s was caught!\n", pokemonInfo.Name)
 		ownPokedex[pokemonInfo.Name] = pokemonInfo
-		fmt.Println("You may now inspect it with the inspect command.")
+		return fmt.Sprintf("Throwing a Pokeball at %s...\n%s was caught!\nYou may now inspect it with the inspect command.", pokemonInfo.Name, pokemonInfo.Name), nil
 	} else {
-		fmt.Printf("%s escaped!\n", pokemonInfo.Name)
+		return fmt.Sprintf("Throwing a Pokeball at %s...\n%s escaped!\n", pokemonInfo.Name, pokemonInfo.Name), nil
 	}
 }

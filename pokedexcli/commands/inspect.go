@@ -6,27 +6,27 @@ import (
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandInspect(config *Config, input []string) error {
+func CommandInspect(config *Config, input ...string) (string, error) {
 	pokemon := input[0]
 	val, ok := ownPokedex[pokemon]
 	if ok {
-		printInfo(val)
-		return nil
+		return printInfo(val), nil
 	} else {
-		return fmt.Errorf("you have not coaught that pokemon")
+		return "", fmt.Errorf("you have not coaught that pokemon")
 	}
 }
 
-func printInfo(pokemonInfo pokeapi.Pokemon) {
-	fmt.Printf("Name: %s\n", pokemonInfo.Name)
-	fmt.Printf("Height: %d\n", pokemonInfo.Height)
-	fmt.Printf("Weight: %d\n", pokemonInfo.Weight)
-	fmt.Println("Stats:")
+func printInfo(pokemonInfo pokeapi.Pokemon) string {
+	msg := fmt.Sprintf("Name: %s\n", pokemonInfo.Name)
+	msg += fmt.Sprintf("Height: %d\n", pokemonInfo.Height)
+	msg += fmt.Sprintf("Weight: %d\n", pokemonInfo.Weight)
+	msg += fmt.Sprintf("Stats:\n")
 	for _, val := range pokemonInfo.Stats {
-		fmt.Printf("-%s: %d\n", val.Stat.Name, val.BaseStat)
+		msg += fmt.Sprintf("-%s: %d\n", val.Stat.Name, val.BaseStat)
 	}
-	fmt.Println("Types:")
+	msg += fmt.Sprintf("Types:\n")
 	for _, val := range pokemonInfo.Types {
-		fmt.Printf("- %s\n", val.Type.Name)
+		msg += fmt.Sprintf("- %s\n", val.Type.Name)
 	}
+	return msg
 }

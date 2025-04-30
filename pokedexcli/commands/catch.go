@@ -12,9 +12,9 @@ import (
 
 var ownPokedex = map[string]pokeapi.Pokemon{}
 
-func CommandCatch(config *Config, input []string) (string, error) {
+func CommandCatch(config *Config, input ...string) (string, error) {
 	if len(input) == 0 {
-		return "", errors.New("Can not catch without a pokemon name")
+		return "", errors.New("can not catch without a pokemon name")
 	}
 	pokemonInput := input[0]
 	cache := config.PokeapiClient.Cache
@@ -35,8 +35,7 @@ func CommandCatch(config *Config, input []string) (string, error) {
 		}
 		defer res.Body.Close()
 		if res.StatusCode > 299 {
-			msg := fmt.Sprintf("This pokemon doesn't exist!")
-			return "", errors.New(msg)
+			return "", errors.New("this pokemon doesn't exist")
 		}
 		var pokemonInfo pokeapi.Pokemon
 		decoder := json.NewDecoder(res.Body)

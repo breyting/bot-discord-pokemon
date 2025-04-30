@@ -2,13 +2,14 @@ package commands
 
 import "fmt"
 
-func CommandPokedex(config *Config, input []string) error {
+func CommandPokedex(config *Config, input ...string) (string, error) {
 	if len(ownPokedex) == 0 {
-		return fmt.Errorf("you didn't catch any pokemon yet")
+		return "", fmt.Errorf("you didn't catch any pokemon yet")
 	}
-	fmt.Println("Your Pokedex :")
+
+	msg := "Your Pokedex :\n"
 	for _, val := range ownPokedex {
-		fmt.Printf("- %s\n", val.Name)
+		msg += fmt.Sprintf("- %s\n", val.Name)
 	}
-	return nil
+	return msg, nil
 }

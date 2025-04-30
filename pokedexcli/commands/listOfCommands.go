@@ -6,44 +6,39 @@ var ListOfCommands map[string]CliCommand
 
 func Init() {
 	ListOfCommands = map[string]CliCommand{
-		"exit": {
-			Name:        "exit",
-			Description: "Exit the Pokedex",
-			Callback:    CommandExit,
-		},
 		"help": {
 			Name:        "help",
-			Description: "Displays a help message",
+			Description: ": Displays a help message",
 			Callback:    CommandHelp,
 		},
 		"map": {
 			Name:        "map",
-			Description: "Displays the 20 next area location",
+			Description: ": Displays the 20 next area location",
 			Callback:    CommandMap,
 		},
 		"mapb": {
 			Name:        "mapb",
-			Description: "Displays the 20 previous area location",
+			Description: ": Displays the 20 previous area location",
 			Callback:    CommandMapb,
 		},
 		"explore": {
 			Name:        "explore",
-			Description: "Displays the pokemon that you can encounter in the location",
+			Description: "[location] : Displays the pokemons that you can encounter in the location",
 			Callback:    CommandExplore,
 		},
-		// "catch": {
-		// 	Name:        "catch",
-		// 	Description: "Try to catch a pokemon",
-		// 	Callback:    CommandCatch,
-		// },
+		"catch": {
+			Name:        "catch",
+			Description: "[pokemon] : Try to catch a pokemon",
+			Callback:    CommandCatch,
+		},
 		"inspect": {
 			Name:        "inspect",
-			Description: "Inspect details of a catched pokemon",
+			Description: "[pokemon] : Inspect details of a catched pokemon",
 			Callback:    CommandInspect,
 		},
 		"pokedex": {
 			Name:        "pokedex",
-			Description: "Diplays all catched pokemons",
+			Description: ": Diplays all catched pokemons",
 			Callback:    CommandPokedex,
 		},
 	}

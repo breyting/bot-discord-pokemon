@@ -10,8 +10,6 @@ import (
 )
 
 func startRepl(conf *commands.Config) {
-	commands.Init()
-	conf.Next = "https://pokeapi.co/api/v2/location-area/1"
 
 	scan := bufio.NewScanner(os.Stdin)
 	for {
@@ -26,7 +24,7 @@ func startRepl(conf *commands.Config) {
 
 		command, exists := commands.ListOfCommands[input[0]]
 		if exists {
-			err := command.Callback(conf, input[1:])
+			_, err := command.Callback(conf, input[1:]...)
 			if err != nil {
 				fmt.Println(err)
 			}

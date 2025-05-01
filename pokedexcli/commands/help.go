@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func CommandHelp(config *Config, input ...string) (string, error) {
+func CommandHelp(config *Config, data *[]UserData, input ...string) (string, error) {
 	msg := "Here is the list of the commands :\n\n"
 
 	keys := make([]string, 0, len(ListOfCommands))

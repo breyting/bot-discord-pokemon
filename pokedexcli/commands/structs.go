@@ -1,13 +1,15 @@
 package commands
 
 import (
+	"time"
+
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(*Config, ...string) (string, error)
+	Callback    func(*Config, *[]UserData, ...string) (string, error)
 }
 
 type Config struct {
@@ -58,4 +60,9 @@ func Init() {
 			Callback:    CommandPokedex,
 		},
 	}
+}
+
+type UserData struct {
+	Pokedex     pokeapi.Pokemon `json:"pokedex"`
+	CaptureDate time.Time       `json:"capture_date"`
 }

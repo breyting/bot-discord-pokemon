@@ -9,7 +9,7 @@ import (
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandMapb(config *Config, input ...string) (string, error) {
+func CommandMapb(config *Config, data *[]UserData, input ...string) (string, error) {
 	msg := "Here are the 20 previous locations:\n"
 
 	id := path.Base(config.Next)

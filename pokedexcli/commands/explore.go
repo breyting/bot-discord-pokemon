@@ -9,7 +9,7 @@ import (
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandExplore(config *Config, input ...string) (string, error) {
+func CommandExplore(config *Config, data *[]UserData, input ...string) (string, error) {
 	if len(input) == 0 {
 		return "", errors.New("Can not explore without a location")
 	}

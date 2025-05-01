@@ -8,7 +8,7 @@ import (
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandMap(config *Config, input ...string) (string, error) {
+func CommandMap(config *Config, data *[]UserData, input ...string) (string, error) {
 	msg := "Here are the 20 next locations:\n"
 
 	for i := 0; i < 20; i++ {

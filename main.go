@@ -61,7 +61,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	switch args[0] {
 	case "hi":
-		sendWelcomeDM(s, m.Author.ID)
+		sendWelcomeDM(s, m.Author.ID, welcomedUsers[m.Author.ID])
 		welcomedUsers[m.Author.ID] = true
 	case "catch":
 		reply, err := commands.CommandCatch(cfg, data, args[1:]...)
@@ -110,22 +110,27 @@ func sendReply(s *discordgo.Session, channelID, reply string, err error) {
 	}
 }
 
-func sendWelcomeDM(s *discordgo.Session, userID string) {
+func sendWelcomeDM(s *discordgo.Session, userID string, welcomed bool) {
+	var msg string
+	if welcomed {
+		msg += "I already welcomed you... Whatever...\n\n"
+	}
+
 	channel, err := s.UserChannelCreate(userID)
 	if err != nil {
 		fmt.Println("Error creating DM channel:", err)
 		return
 	}
 
-	msg := "**👋 Welcome to the Pokedex Bot!**\n\n" +
+	msg += "**👋 Welcome to the Pokedex Bot!**\n\n" +
 		"Here, you can explore the Pokemon world, catch Pokemon, and build your own Pokedex — all within Discord!\n\n" +
 		"**Basic commands:**\n" +
-		"`help` – List all available commands\n\n" +
+		"`help` – List all available commands\n" +
 		"`map` and `mapb` – Display the 20 next or previous locations of the Pokemon world\n" +
 		"`explore [location]` – Displays all the Pokemon available in the location\n" +
 		"`catch [pokemon]` – Try to catch a Pokémon\n" +
 		"`inspect [pokemon]` – See details of a captured Pokemon\n" +
-		"`pokedex` – View your Pokedex with your catched Pokemons\n" +
+		"`pokedex` – View your Pokedex with your catched Pokemons\n\n" +
 		"Good luck, Trainer! 🔍🎒"
 
 	s.ChannelMessageSend(channel.ID, msg)

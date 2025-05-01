@@ -60,7 +60,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	switch args[0] {
-	case "hi":
+	case "hi", "hello", "hey":
 		sendWelcomeDM(s, m.Author.ID, welcomedUsers[m.Author.ID])
 		welcomedUsers[m.Author.ID] = true
 	case "catch":

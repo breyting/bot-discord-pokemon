@@ -17,7 +17,6 @@ var cfg = &commands.Config{
 	Next:          pokeapi.BaseURL + "/location-area/1",
 }
 var welcomedUsers = make(map[string]bool)
-var userDB map[string]*[]commands.UserData // Clé = userID Discord
 
 func main() {
 	commands.Init()

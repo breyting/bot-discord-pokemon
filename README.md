@@ -10,8 +10,9 @@ To-do liste :
 - Présenter les commandes différentes :heavy_check_mark:
 
 - Possibles améliorations :
-    - Faire en sorte de garder un historique des pokémons capturer en fonction des utilisateurs ? :soon:
-    - Trouver un moyen de stocker le token du bot sans le partager au monde entier :soon:
+    - Faire en sorte de garder un historique des pokémons capturer en fonction des utilisateurs :heavy_check_mark:
+    - Ajouter les pokémons shiny :heavy_check_mark:
+    - Trouver un moyen de stocker ailleurs qu'en local le token du bot, sans le partager au monde entier :soon:
     - Être dans une zone et faire pop un pokemon aléatoire. (avec explore ?)
     - Parcourir les régions de manières plus logiques ?
     - Faire plusieurs styles de pokéballs ? Comment en obtenir ?

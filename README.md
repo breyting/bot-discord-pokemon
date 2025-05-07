@@ -10,6 +10,7 @@ To-do liste :
 - Présenter les commandes différentes :heavy_check_mark:
 
 - Possibles améliorations :
+    - :warning: Écrire des TESTS :warning:
     - Faire en sorte de garder un historique des pokémons capturer en fonction des utilisateurs :heavy_check_mark:
     - Ajouter les pokémons shiny :heavy_check_mark:
     - Trouver un moyen de stocker ailleurs qu'en local le token du bot, sans le partager au monde entier :soon:

@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -16,9 +17,10 @@ func LoadUserData(userID string) (map[string]UserData, error) {
 		return nil, err
 	}
 	defer file.Close()
-
 	var data map[string]UserData
-	err = json.NewDecoder(file).Decode(&data)
+
+	byteVal, err := io.ReadAll(file)
+	json.Unmarshal(byteVal, &data)
 	return data, err
 }
 

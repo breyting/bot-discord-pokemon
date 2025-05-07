@@ -87,15 +87,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "inspect":
-		reply, err := commands.CommandInspect(cfg, data, args[1:]...)
+		reply, err := commands.CommandInspect(cfg, data, s, m, args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "help":
 		reply, err := commands.CommandHelp(args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
-
-	default:
-		s.ChannelMessageSend(m.ChannelID, "Unknown command. Type `help` for a list of commands.")
 	}
 
 }

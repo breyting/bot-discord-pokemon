@@ -100,10 +100,25 @@ func waitForNickname(s *discordgo.Session, userID, channelID string, newPokemon 
 			SaveUserData(userID, data)
 			s.ChannelMessageSend(channelID, fmt.Sprintf("✅ %s has been nicknamed **%s**!", newPokemon.Pokemon.Name, nickname))
 		} else {
-			s.ChannelMessageSend(channelID, fmt.Sprintf("No nickname given for %s.", newPokemon.Pokemon.Name))
+			nickname := getIncrementedName(newPokemon.Pokemon.Name, data)
+			data[nickname] = newPokemon
+			SaveUserData(userID, data)
+			s.ChannelMessageSend(channelID, fmt.Sprintf("No nickname given for %s.", nickname))
 		}
 
 	case <-timeout:
 		s.ChannelMessageSend(channelID, fmt.Sprintf("⏰ No response received. %s was saved without a nickname.", newPokemon.Pokemon.Name))
 	}
+}
+
+func getIncrementedName(name string, data map[string]UserData) string {
+	if _, exists := data[name]; exists {
+		for i := 1; ; i++ {
+			newName := fmt.Sprintf("%s_%d", name, i)
+			if _, exists := data[newName]; !exists {
+				return newName
+			}
+		}
+	}
+	return name
 }

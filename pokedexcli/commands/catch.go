@@ -29,6 +29,7 @@ func CommandCatch(config *Config, data *[]UserData, input ...string) (string, er
 func tryingCatch(pokemonInfo pokeapi.Pokemon, data *[]UserData) (string, error) {
 	baseExperience := pokemonInfo.BaseExperience
 	chance := rand.Intn(baseExperience)
+	msg := fmt.Sprintf("Throwing a Pokeball at %s...\n", pokemonInfo.Name)
 	if chance < 50 {
 		ownPokedex[pokemonInfo.Name] = pokemonInfo
 		new_pokemon := UserData{
@@ -36,8 +37,15 @@ func tryingCatch(pokemonInfo pokeapi.Pokemon, data *[]UserData) (string, error) 
 			time.Now(),
 		}
 		*data = append(*data, new_pokemon)
-		return fmt.Sprintf("Throwing a Pokeball at %s...\n%s was caught!\nYou may now inspect it with the inspect command.", pokemonInfo.Name, pokemonInfo.Name), nil
+		sprite := pokemonInfo.Sprites.FrontDefault
+		msg += fmt.Sprintf("%s was caught!\n", pokemonInfo.Name)
+		msg += fmt.Sprintf("%v\n", sprite)
+		msg += "You may now inspect it with the inspect command.\n"
+		return msg, nil
 	} else {
-		return fmt.Sprintf("Throwing a Pokeball at %s...\n%s escaped!\n", pokemonInfo.Name, pokemonInfo.Name), nil
+		sprite := pokemonInfo.Sprites.BackDefault
+		msg += fmt.Sprintf("%s escaped!\n", pokemonInfo.Name)
+		msg += fmt.Sprintf("%v\n", sprite)
+		return msg, nil
 	}
 }

@@ -20,11 +20,11 @@ func printInfo(pokemonInfo pokeapi.Pokemon) string {
 	msg := fmt.Sprintf("Name: %s\n", pokemonInfo.Name)
 	msg += fmt.Sprintf("Height: %d\n", pokemonInfo.Height)
 	msg += fmt.Sprintf("Weight: %d\n", pokemonInfo.Weight)
-	msg += fmt.Sprintf("Stats:\n")
+	msg += "Stats:\n"
 	for _, val := range pokemonInfo.Stats {
 		msg += fmt.Sprintf("-%s: %d\n", val.Stat.Name, val.BaseStat)
 	}
-	msg += fmt.Sprintf("Types:\n")
+	msg += "Types:\n"
 	for _, val := range pokemonInfo.Types {
 		msg += fmt.Sprintf("- %s\n", val.Type.Name)
 	}

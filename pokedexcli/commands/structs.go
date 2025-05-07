@@ -51,6 +51,10 @@ func Init() {
 			Name:        "pokedex",
 			Description: "`pokedex` : Diplays all catched pokemons",
 		},
+		"free": {
+			Name:        "free",
+			Description: "`free [pokemon]` : Release a pokemon from your Pokedex",
+		},
 	}
 }
 

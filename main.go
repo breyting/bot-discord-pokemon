@@ -61,6 +61,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "hi", "hello", "hey":
 		sendWelcomeDM(s, m.Author.ID, welcomedUsers[m.Author.ID])
 		welcomedUsers[m.Author.ID] = true
+
 	case "catch":
 		reply, err := commands.CommandCatch(cfg, data, s, m, args[1:]...)
 		if err == nil {
@@ -92,6 +93,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	case "help":
 		reply, err := commands.CommandHelp(args[1:]...)
+		sendReply(s, m.ChannelID, reply, err)
+
+	case "free":
+		reply, err := commands.CommandFree(cfg, data, args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
 	}
 

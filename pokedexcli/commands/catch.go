@@ -30,11 +30,25 @@ func tryingCatch(pokemonInfo pokeapi.Pokemon, data *[]UserData) (string, error) 
 	baseExperience := pokemonInfo.BaseExperience
 	chance := rand.Intn(baseExperience)
 	msg := fmt.Sprintf("Throwing a Pokeball at %s...\n", pokemonInfo.Name)
-	if chance < 50 {
+	if chance < 5 {
 		ownPokedex[pokemonInfo.Name] = pokemonInfo
 		new_pokemon := UserData{
 			pokemonInfo,
 			time.Now(),
+			true,
+		}
+		*data = append(*data, new_pokemon)
+		sprite := pokemonInfo.Sprites.FrontShiny
+		msg += fmt.Sprintf("%s shiny was caught!\n", pokemonInfo.Name)
+		msg += fmt.Sprintf("%v\n", sprite)
+		msg += "You may now inspect it with the inspect command.\n"
+		return msg, nil
+	} else if chance < 50 {
+		ownPokedex[pokemonInfo.Name] = pokemonInfo
+		new_pokemon := UserData{
+			pokemonInfo,
+			time.Now(),
+			false,
 		}
 		*data = append(*data, new_pokemon)
 		sprite := pokemonInfo.Sprites.FrontDefault

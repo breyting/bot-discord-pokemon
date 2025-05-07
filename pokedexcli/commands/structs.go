@@ -65,4 +65,5 @@ func Init() {
 type UserData struct {
 	Pokedex     pokeapi.Pokemon `json:"pokedex"`
 	CaptureDate time.Time       `json:"capture_date"`
+	isShiny     bool            `json:"is_shiny"`
 }

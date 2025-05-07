@@ -7,7 +7,7 @@ func CommandPokedex(config *Config, data map[string]UserData, input ...string) (
 		return "", fmt.Errorf("you didn't catch any pokemon yet")
 	}
 
-	if input[0] == "shiny" {
+	if len(input) > 0 && input[0] == "shiny" {
 		msg := "Your shiny Pokedex :\n"
 		for key, val := range data {
 			if val.IsShiny {

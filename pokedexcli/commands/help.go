@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func CommandHelp(config *Config, data *[]UserData, input ...string) (string, error) {
+func CommandHelp(input ...string) (string, error) {
 	msg := "Here is the list of the commands :\n\n"
 
 	keys := make([]string, 0, len(ListOfCommands))
@@ -16,7 +16,7 @@ func CommandHelp(config *Config, data *[]UserData, input ...string) (string, err
 	sort.Strings(keys)
 
 	for _, command := range keys {
-		msg += fmt.Sprintf("- `%s` %s\n", ListOfCommands[command].Name, ListOfCommands[command].Description)
+		msg += fmt.Sprintf("- %s\n", ListOfCommands[command].Description)
 	}
 	return msg, nil
 }

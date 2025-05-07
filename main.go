@@ -12,7 +12,6 @@ import (
 
 var pokeClient = pokeapi.NewClient(5*time.Second, 5*time.Minute)
 var cfg = &commands.Config{
-	CaughtPokemon: map[string]pokeapi.Pokemon{},
 	PokeapiClient: pokeClient,
 	Next:          pokeapi.BaseURL + "/location-area/1",
 }
@@ -63,23 +62,23 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		sendWelcomeDM(s, m.Author.ID, welcomedUsers[m.Author.ID])
 		welcomedUsers[m.Author.ID] = true
 	case "catch":
-		reply, err := commands.CommandCatch(cfg, data, args[1:]...)
+		reply, err := commands.CommandCatch(cfg, data, s, m, args[1:]...)
 		if err == nil {
 			commands.SaveUserData(userID, data)
 		}
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "explore":
-		reply, err := commands.CommandExplore(cfg, data, args[1:]...)
+		reply, err := commands.CommandExplore(cfg, args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "map":
-		reply, err := commands.CommandMap(cfg, data, args[1:]...)
+		reply, err := commands.CommandMap(cfg, args[1:]...)
 		s.ChannelMessageSend(m.ChannelID, "Trying to get the next locations...")
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "mapb":
-		reply, err := commands.CommandMapb(cfg, data, args[1:]...)
+		reply, err := commands.CommandMapb(cfg, args[1:]...)
 		s.ChannelMessageSend(m.ChannelID, "Trying to get the previous locations...")
 		sendReply(s, m.ChannelID, reply, err)
 
@@ -92,7 +91,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "help":
-		reply, err := commands.CommandHelp(cfg, data, args[1:]...)
+		reply, err := commands.CommandHelp(args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
 
 	default:

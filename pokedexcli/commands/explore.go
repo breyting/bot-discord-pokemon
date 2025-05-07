@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func CommandExplore(config *Config, data *[]UserData, input ...string) (string, error) {
+func CommandExplore(config *Config, input ...string) (string, error) {
 	if len(input) == 0 {
 		return "", errors.New("can not explore without a location")
 	}

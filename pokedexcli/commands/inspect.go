@@ -6,13 +6,13 @@ import (
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
 )
 
-func CommandInspect(config *Config, data *[]UserData, input ...string) (string, error) {
+func CommandInspect(config *Config, data map[string]UserData, input ...string) (string, error) {
 	pokemon := input[0]
-	val, ok := ownPokedex[pokemon]
+	val, ok := data[pokemon]
 	if ok {
-		return printInfo(val), nil
+		return printInfo(val.Pokemon), nil
 	} else {
-		return "", fmt.Errorf("you have not coaught that pokemon")
+		return "", fmt.Errorf("you have not caught that pokemon")
 	}
 }
 

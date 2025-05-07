@@ -4,14 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/breyting/pokedex-discord/pokedexcli/pokeapi"
+	"github.com/bwmarrin/discordgo"
 )
 
-var ownPokedex = map[string]pokeapi.Pokemon{}
-
-func CommandCatch(config *Config, data *[]UserData, input ...string) (string, error) {
+func CommandCatch(config *Config, data map[string]UserData, s *discordgo.Session, m *discordgo.MessageCreate, input ...string) (string, error) {
 	if len(input) == 0 {
 		return "", errors.New("can not catch without a pokemon name")
 	}
@@ -23,43 +23,87 @@ func CommandCatch(config *Config, data *[]UserData, input ...string) (string, er
 		return "", err
 	}
 
-	return tryingCatch(pokemonInfo, data)
+	return tryingCatch(pokemonInfo, data, s, m)
 }
 
-func tryingCatch(pokemonInfo pokeapi.Pokemon, data *[]UserData) (string, error) {
+func tryingCatch(pokemonInfo pokeapi.Pokemon, data map[string]UserData, s *discordgo.Session, m *discordgo.MessageCreate) (string, error) {
 	baseExperience := pokemonInfo.BaseExperience
 	chance := rand.Intn(baseExperience)
-	msg := fmt.Sprintf("Throwing a Pokeball at %s...\n", pokemonInfo.Name)
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Throwing a Pokeball at %s...\n", pokemonInfo.Name))
 	if chance < 5 {
-		ownPokedex[pokemonInfo.Name] = pokemonInfo
+		// Shiny Pokemon
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s shiny was caught!\n", pokemonInfo.Name))
+
 		new_pokemon := UserData{
 			pokemonInfo,
 			time.Now(),
 			true,
 		}
-		*data = append(*data, new_pokemon)
+
 		sprite := pokemonInfo.Sprites.FrontShiny
-		msg += fmt.Sprintf("%s shiny was caught!\n", pokemonInfo.Name)
-		msg += fmt.Sprintf("%v\n", sprite)
-		msg += "You may now inspect it with the inspect command.\n"
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%v\n", sprite))
+
+		waitForNickname(s, m.Author.ID, m.ChannelID, new_pokemon, data)
+
+		msg := "You may now inspect it with the inspect command.\n"
 		return msg, nil
 	} else if chance < 50 {
-		ownPokedex[pokemonInfo.Name] = pokemonInfo
+		// Normal Pokemon
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s was caught!\n", pokemonInfo.Name))
 		new_pokemon := UserData{
 			pokemonInfo,
 			time.Now(),
 			false,
 		}
-		*data = append(*data, new_pokemon)
+
 		sprite := pokemonInfo.Sprites.FrontDefault
-		msg += fmt.Sprintf("%s was caught!\n", pokemonInfo.Name)
-		msg += fmt.Sprintf("%v\n", sprite)
-		msg += "You may now inspect it with the inspect command.\n"
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%v\n", sprite))
+
+		waitForNickname(s, m.Author.ID, m.ChannelID, new_pokemon, data)
+
+		msg := "You may now inspect it with the inspect command.\n"
+
 		return msg, nil
 	} else {
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s escaped!\n", pokemonInfo.Name))
 		sprite := pokemonInfo.Sprites.BackDefault
-		msg += fmt.Sprintf("%s escaped!\n", pokemonInfo.Name)
-		msg += fmt.Sprintf("%v\n", sprite)
-		return msg, nil
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%v\n", sprite))
+		return "", nil
+	}
+}
+
+func waitForNickname(s *discordgo.Session, userID, channelID string, newPokemon UserData, data map[string]UserData) {
+	s.ChannelMessageSend(channelID, fmt.Sprintf("What nickname do you want to give to %s?\n", newPokemon.Pokemon.Name))
+	timeout := time.After(30 * time.Second)
+	messages := make(chan *discordgo.MessageCreate)
+
+	// Temp handler for replies
+	handler := func(_ *discordgo.Session, m *discordgo.MessageCreate) {
+		if m.Author.ID == userID && m.ChannelID == channelID {
+			messages <- m
+		}
+	}
+
+	remove := s.AddHandler(handler)
+	defer remove()
+
+	select {
+	case msg := <-messages:
+		nickname := strings.TrimSpace(msg.Content)
+		_, aleardyIn := data[nickname]
+		if aleardyIn {
+			s.ChannelMessageSend(channelID, fmt.Sprintf("❌ %s is already taken. Please choose another nickname.", nickname))
+			waitForNickname(s, userID, channelID, newPokemon, data)
+			return
+		} else if strings.ToLower(nickname) != "no" && nickname != "" {
+			data[nickname] = newPokemon
+			SaveUserData(userID, data)
+			s.ChannelMessageSend(channelID, fmt.Sprintf("✅ %s has been nicknamed **%s**!", newPokemon.Pokemon.Name, nickname))
+		} else {
+			s.ChannelMessageSend(channelID, fmt.Sprintf("No nickname given for %s.", newPokemon.Pokemon.Name))
+		}
+
+	case <-timeout:
+		s.ChannelMessageSend(channelID, fmt.Sprintf("⏰ No response received. %s was saved without a nickname.", newPokemon.Pokemon.Name))
 	}
 }

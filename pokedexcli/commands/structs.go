@@ -9,7 +9,6 @@ import (
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(*Config, *[]UserData, ...string) (string, error)
 }
 
 type Config struct {
@@ -26,44 +25,37 @@ func Init() {
 	ListOfCommands = map[string]CliCommand{
 		"help": {
 			Name:        "help",
-			Description: ": Displays a help message",
-			Callback:    CommandHelp,
+			Description: "`help` : Displays a help message",
 		},
 		"map": {
 			Name:        "map",
-			Description: ": Displays the 20 next area location",
-			Callback:    CommandMap,
+			Description: "`map` : Displays the 20 next area location",
 		},
 		"mapb": {
 			Name:        "mapb",
-			Description: ": Displays the 20 previous area location",
-			Callback:    CommandMapb,
+			Description: "`mapb` : Displays the 20 previous area location",
 		},
 		"explore": {
 			Name:        "explore",
-			Description: "[location] : Displays the pokemons that you can encounter in the location",
-			Callback:    CommandExplore,
+			Description: "`explore [location]` : Displays the pokemons that you can encounter in the location",
 		},
 		"catch": {
 			Name:        "catch",
-			Description: "[pokemon] : Try to catch a pokemon",
-			Callback:    CommandCatch,
+			Description: "`catch [pokemon]` : Try to catch a pokemon",
 		},
 		"inspect": {
 			Name:        "inspect",
-			Description: "[pokemon] : Inspect details of a catched pokemon",
-			Callback:    CommandInspect,
+			Description: "`inspect [pokemon]` : Inspect details of a catched pokemon",
 		},
 		"pokedex": {
 			Name:        "pokedex",
-			Description: ": Diplays all catched pokemons",
-			Callback:    CommandPokedex,
+			Description: "`pokedex` : Diplays all catched pokemons",
 		},
 	}
 }
 
 type UserData struct {
-	Pokedex     pokeapi.Pokemon `json:"pokedex"`
+	Pokemon     pokeapi.Pokemon `json:"pokedex"`
 	CaptureDate time.Time       `json:"capture_date"`
-	isShiny     bool            `json:"is_shiny"`
+	IsShiny     bool            `json:"is_shiny"`
 }

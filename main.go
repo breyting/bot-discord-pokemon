@@ -96,7 +96,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		sendReply(s, m.ChannelID, reply, err)
 
 	case "free":
-		reply, err := commands.CommandFree(cfg, data, args[1:]...)
+		reply, err := commands.CommandFree(cfg, data, s, m, args[1:]...)
 		sendReply(s, m.ChannelID, reply, err)
 	}
 
